@@ -1,0 +1,22 @@
+# Ensure we are in a container-based ci environment (faster boot time)
+sudo: false
+
+language: node_js
+node_js: 8
+
+# Don't email me the results of the test runs.
+notifications:
+  email: false
+
+# Only clone the most recent commit.
+git:
+  depth: 1
+
+install:
+  - yarn
+
+script:
+  - yarn test
+  - yarn lint
+
+cache: yarn
