@@ -20,7 +20,7 @@ export default class Client {
       url = `${url}&redirect_uri=${encodeURIComponent(this._params.redirectURI)}`
     }
 
-    url = `${url}&scope=${encodeURIComponent(this._params.scopes.join('+'))}`
+    url = `${url}&scope=${encodeURIComponent(this._params.scopes.join(','))}`
 
     window.location = url
   }
