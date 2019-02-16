@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/halium-project/dashboard.svg?branch=master)](https://travis-ci.org/halium-project/dashboard)
+
 # Admin Dashboard
 
 > An admin dashboard for MySuperCloud
