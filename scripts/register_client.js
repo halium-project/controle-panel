@@ -9,7 +9,7 @@ fetch('http://localhost:42000/clients', {
     redirectURI: ['http://localhost:8080'],
     grantTypes: ['implicit', 'refresh_token'],
     responseTypes: ['token', 'code'],
-    scopes: ["users"],
+    scopes: ["users", "clients.read"],
     public: true
   })
 }).then(response => {
