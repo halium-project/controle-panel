@@ -7,7 +7,7 @@ const url = 'http://localhost:42000'
 const client = new Client({
   clientID: 'dashboard',
   serverURL: url,
-  scopes: ['users'],
+  scopes: ['users', 'clients.read'],
   response_type: 'token',
   debug: true
 })
