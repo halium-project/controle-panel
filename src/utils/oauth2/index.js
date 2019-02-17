@@ -5,7 +5,7 @@ import Storage from '@/utils/oauth2/storage'
 const url = 'http://localhost:42000'
 
 const client = new Client({
-  clientID: 'dashboard',
+  clientID: 'controle-panel',
   serverURL: url,
   scopes: ['users', 'clients.read'],
   response_type: 'token',
