@@ -1,4 +1,4 @@
-[![license](http://img.shields.io/badge/license-Apache%20v2-orange.svg)](https://raw.githubusercontent.com/Peltoche/ical-rs/master/LICENSE)
+![](https://img.shields.io/github/license/halium-project/controle-panel.svg?style=flat)
 [![Build Status](https://travis-ci.org/halium-project/dashboard.svg?branch=master)](https://travis-ci.org/halium-project/dashboard)
 
 # Admin Dashboard
