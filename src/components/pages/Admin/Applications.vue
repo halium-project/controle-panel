@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     fetchAvailableApps: function () {
-      console.log(`foobar: ${storeURL}/applications`)
       return fetch(`${storeURL}/applications`, {})
         .then(res => res.json())
     },

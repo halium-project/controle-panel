@@ -48,7 +48,6 @@ export default class Client {
   }
 
   _parseQueryString (qs) {
-    console.log('parse url: ', qs)
     const a = /\+/g // Regex for replacing addition symbol with a space
     const r = /([^&;=]+)=?([^&;]*)/g
     const d = (s) => decodeURIComponent(s.replace(a, ' '))
@@ -74,7 +73,6 @@ export default class Client {
       urlParams[d(e[1])] = d(e[2])
     }
 
-    console.log('scope: ', urlParams.scope.split(','))
     const session = {
       access_token: urlParams.access_token,
       expires_in: urlParams.expires_in,
