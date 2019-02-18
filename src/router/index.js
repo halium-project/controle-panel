@@ -1,6 +1,7 @@
 import Router from 'vue-router'
 
 import Callback from '@/utils/oauth2/Callback'
+import { storage } from '@/utils/oauth2'
 
 import Login from '@/components/pages/Login'
 import Admin from '@/components/pages/Admin/Admin'
@@ -13,6 +14,14 @@ let router = new Router({
     {
       path: '/admin/*',
       component: Admin,
+      beforeEach: (to, from, next) => {
+        const session = storage.getSession()
+        if (!session) {
+          next('/login')
+        }
+
+        next()
+      },
       children: [{
         path: '/applications',
         component: Applications

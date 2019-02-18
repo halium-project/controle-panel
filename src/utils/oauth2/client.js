@@ -74,10 +74,11 @@ export default class Client {
       urlParams[d(e[1])] = d(e[2])
     }
 
+    console.log('scope: ', urlParams.scope.split(','))
     const session = {
       access_token: urlParams.access_token,
       expires_in: urlParams.expires_in,
-      scopes: urlParams.scope.split('+'),
+      scopes: urlParams.scope.split(','),
       token_type: urlParams.token_typ
     }
 
