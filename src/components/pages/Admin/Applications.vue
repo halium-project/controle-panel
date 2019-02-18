@@ -23,7 +23,7 @@ import { storage, client, url } from '@/utils/oauth2'
 const storeURL = 'http://localhost:42001'
 
 export default {
-  name: 'Applications',
+  name: 'Admin',
   data: function () {
     return {
       apps: [],

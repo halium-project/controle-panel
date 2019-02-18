@@ -2,36 +2,29 @@ import Router from 'vue-router'
 
 import Callback from '@/utils/oauth2/Callback'
 
-import LoggedLayout from '@/components/pages/LoggedLayout'
-import Applications from '@/components/pages/Applications'
 import Login from '@/components/pages/Login'
-import Users from '@/components/pages/Users'
+import Admin from '@/components/pages/Admin/Admin'
+import Applications from '@/components/pages/Admin/Applications'
+import Users from '@/components/pages/Admin/Users'
 
 let router = new Router({
   routes: [
     // Logged
     {
-      path: '/applications',
-      name: 'Applications',
-      component: LoggedLayout,
+      path: '/admin/*',
+      component: Admin,
       children: [{
-        path: '/',
+        path: '/applications',
         component: Applications
-      }]
-    },
-    {
-      path: '/users',
-      name: 'Users',
-      component: LoggedLayout,
-      children: [{
-        path: '/',
+      }, {
+        path: '/users',
         component: Users
       }]
     },
     // Redirected
     {
       path: '/',
-      redirect: '/users'
+      redirect: '/admin/users'
     },
     // Not logged
     {
