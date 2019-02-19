@@ -1,19 +1,29 @@
 <template>
   <div>
     <h1 class="app-list-title"> Activated Applications </h1>
-    <div v-for="app in activatedApps" :key="app.name" >
-      <Card class="app-card" :title="app.name">
-      <p>{{ app.description }}</p>
+    <Row type="flex" justify="space-between">
+      <i-Col>
+      <Card class="app-card" v-for="app in activatedApps" :key="'activ-' + app.id">
+        <p slot="title">{{ app.name  }}</p>
+        <Button slot="extra" v-on:click="deleteApp" :value="app.id" class="app-card-btn" type="error">
+          <Icon type="md-close"></Icon>
+        </Button>
+        <p class="app-card-description">{{ app.description }}</p>
       </Card>
-    </div>
+    </i-Col>
+    </Row>
 
     <Divider />
     <h1 class="app-list-title"> Available Applications </h1>
-    <div v-for="app in availableApps" :key="app.name" >
-      <Card class="app-card" :title="app.name">
-      <p>{{ app.description }}</p>
+    <Row>
+      <Card class="app-card" v-for="app in availableApps" :key="'avail-' + app.id">
+        <p slot="title">{{ app.name  }}</p>
+        <Button slot="extra" v-on:click="addApp" :value="app.id" class="app-card-btn" type="success">
+          <Icon type="md-add"></Icon>
+        </Button>
+        <p class="app-card-description">{{ app.description }}</p>
       </Card>
-    </div>
+    </Row>
   </div>
 </template>
 
@@ -26,9 +36,7 @@ export default {
   name: 'Admin',
   data: function () {
     return {
-      apps: [],
-      activatedApps: [],
-      availableApps: []
+      apps: {}
     }
   },
   created: function () {
@@ -41,15 +49,20 @@ export default {
       this.fetchActivatedApps()
     ])
       .then(([available, activated]) => {
-        this.apps = Object.keys(available).map(id => {
-          let app = available[id]
-          app.activated = Object.keys(activated).includes(id)
-          return app
+        Object.keys(activated).forEach((id) => {
+          available[id].activated = true
         })
 
-        this.activatedApps = this.apps.filter(elem => elem.activated)
-        this.availableApps = this.apps.filter(elem => !elem.activated)
+        this.apps = available
       })
+  },
+  computed: {
+    availableApps: function () {
+      return Object.keys(this.maps).map(id => this.maps[id]).filter(app => !app.activated)
+    },
+    activatedApps: function () {
+      return Object.keys(this.maps).map(id => this.maps[id]).filter(app => app.activated)
+    }
   },
   methods: {
     fetchAvailableApps: function () {
@@ -61,6 +74,14 @@ export default {
         headers: { 'Authorization': client.getAuthorizationHeader() }
       })
         .then(res => res.json())
+    },
+    deleteApp: function (event) {
+      console.log('delete: ', event.target.value)
+      this.$set(this.apps[event.target.value], 'activated', false)
+    },
+    addApp: function (event) {
+      console.log('add: ', event.target.value)
+      this.$set(this.apps[event.target.value], 'activated', true)
     }
   }
 }
@@ -77,5 +98,13 @@ export default {
 .app-card {
   width: 300px;
   height: 150px;
+}
+
+.app-card-btn {
+  padding: 5px 10px;
+}
+
+.app-card-description {
+  text-align: center;
 }
 </style>
