@@ -84,11 +84,19 @@ export default {
         .then(res => res.json())
     },
     deleteApp: function (event) {
-      console.log('delete: ', event.target.value)
-      this.$set(this.apps[event.target.value], 'activated', false)
+      fetch(`${url}/clients/${event.target.value}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': client.getAuthorizationHeader() }
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            this.$set(this.apps[event.target.value], 'activated', false)
+            return
+          }
+          console.error('failed to delete the app')
+        })
     },
     addApp: function (event) {
-      console.log('tutu: ', url)
       fetch(`${url}/clients`, {
         method: 'POST',
         body: JSON.stringify(this.apps[event.target.value]),
@@ -98,11 +106,12 @@ export default {
         }
       })
         .then((res) => {
-          console.log('add: ', event.target.value)
-          this.$set(this.apps[event.target.value], 'activated', true)
-        })
-        .catch((err) => {
-          console.error(err)
+          if (res.status === 201) {
+            this.$set(this.apps[event.target.value], 'activated', true)
+            return
+          }
+
+          console.error('failed to register the app')
         })
     }
   }
