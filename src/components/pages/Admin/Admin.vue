@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'LoggedLayout'
+  name: 'Admin'
 }
 </script>
 

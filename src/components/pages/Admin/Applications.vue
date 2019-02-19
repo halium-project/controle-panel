@@ -1,49 +1,47 @@
 <template>
   <div>
     <h1 class="app-list-title"> Activated Applications </h1>
-    <Row type="flex" justify="space-between">
-      <i-Col>
-      <Card class="app-card" v-for="app in activatedApps" :key="'activ-' + app.id">
-        <p slot="title">{{ app.name  }}</p>
-        <Button slot="extra" v-on:click="deleteApp" :value="app.id" class="app-card-btn" type="error">
-          <Icon type="md-close"></Icon>
-        </Button>
-        <p class="app-card-description">{{ app.description }}</p>
-      </Card>
+    <Row type="flex" justify="start" :gutter="16" class="code-row-bg">
+      <i-Col v-for="(app, appID) in activatedApps" :key="'activ-' + appID">
+        <Card class="app-card">
+          <p slot="title">{{ app.name  }}</p>
+          <Button slot="extra" v-on:click="deleteApp" :value="appID" class="app-card-btn" type="error">
+            <Icon type="md-close"></Icon>
+          </Button>
+          <p class="app-card-description">{{ app.description }}</p>
+        </Card>
     </i-Col>
     </Row>
 
     <Divider />
     <h1 class="app-list-title"> Available Applications </h1>
-    <Row>
-      <Card class="app-card" v-for="app in availableApps" :key="'avail-' + app.id">
-        <p slot="title">{{ app.name  }}</p>
-        <Button slot="extra" v-on:click="addApp" :value="app.id" class="app-card-btn" type="success">
-          <Icon type="md-add"></Icon>
-        </Button>
-        <p class="app-card-description">{{ app.description }}</p>
-      </Card>
+    <Row type="flex" justify="start" :gutter="16" class="code-row-bg">
+      <i-Col v-for="(app, appID) in availableApps" :key="'avail-' + appID">
+        <Card class="app-card">
+          <p slot="title">{{ app.name  }}</p>
+          <Button slot="extra" v-on:click="addApp" :value="appID" class="app-card-btn" type="success">
+            <Icon type="md-add"></Icon>
+          </Button>
+          <p class="app-card-description">{{ app.description }}</p>
+        </Card>
+      </i-Col>
     </Row>
   </div>
 </template>
 
 <script>
-import { storage, client, url } from '@/utils/oauth2'
+import { client, url } from '@/utils/oauth2'
 
 const storeURL = 'http://localhost:42001'
 
 export default {
-  name: 'Admin',
+  name: 'Applications',
   data: function () {
     return {
       apps: {}
     }
   },
   created: function () {
-    if (!storage.getSession()) {
-      this.$router.push('/login')
-    }
-
     Promise.all([
       this.fetchAvailableApps(),
       this.fetchActivatedApps()
@@ -58,10 +56,20 @@ export default {
   },
   computed: {
     availableApps: function () {
-      return Object.keys(this.maps).map(id => this.maps[id]).filter(app => !app.activated)
+      const predicate = app => app && !app.activated
+
+      // Filter an object with the predicate
+      return Object.keys(this.apps)
+        .filter(id => predicate(this.apps[id]))
+        .reduce((res, key) => Object.assign(res, { [key]: this.apps[key] }), {})
     },
     activatedApps: function () {
-      return Object.keys(this.maps).map(id => this.maps[id]).filter(app => app.activated)
+      const predicate = app => app && app.activated
+
+      // Filter an object with the predicate
+      return Object.keys(this.apps)
+        .filter(id => predicate(this.apps[id]))
+        .reduce((res, key) => Object.assign(res, { [key]: this.apps[key] }), {})
     }
   },
   methods: {
