@@ -88,8 +88,22 @@ export default {
       this.$set(this.apps[event.target.value], 'activated', false)
     },
     addApp: function (event) {
-      console.log('add: ', event.target.value)
-      this.$set(this.apps[event.target.value], 'activated', true)
+      console.log('tutu: ', url)
+      fetch(`${url}/clients`, {
+        method: 'POST',
+        body: JSON.stringify(this.apps[event.target.value]),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': client.getAuthorizationHeader()
+        }
+      })
+        .then((res) => {
+          console.log('add: ', event.target.value)
+          this.$set(this.apps[event.target.value], 'activated', true)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
   }
 }
