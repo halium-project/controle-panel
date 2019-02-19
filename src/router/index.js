@@ -14,7 +14,7 @@ let router = new Router({
     {
       path: '/admin/*',
       component: Admin,
-      beforeEach: (to, from, next) => {
+      beforeEnter: (to, from, next) => {
         const session = storage.getSession()
         if (!session) {
           next('/login')
