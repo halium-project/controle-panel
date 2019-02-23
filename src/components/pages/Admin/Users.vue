@@ -1,6 +1,11 @@
 <template>
   <div class="users">
-    <Table :columns="table.columnsName" :data="table.content"></Table>
+    <Table :columns="table.columnsName" :data="tableContent">
+      <template slot-scope="{ row, index }" slot="action">
+        <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>-->
+        <Button type="error" size="small" @click="remove(index)">Delete</Button>
+      </template>
+    </Table>
   </div>
 </template>
 
@@ -15,9 +20,9 @@ export default {
       table: {
         columnsName: [
           { title: 'Username', key: 'username' },
-          { title: 'Role', key: 'role' }
-        ],
-        content: []
+          { title: 'Role', key: 'role' },
+          { title: 'Action', slot: 'action', width: 150, align: 'center' }
+        ]
       }
     }
   },
@@ -32,8 +37,33 @@ export default {
       .then(res => res.json())
       .then((body) => {
         this.users = body
-        this.table.content = Object.keys(this.users).map(id => this.users[id])
       })
+  },
+  computed: {
+    tableContent: function () {
+      return Object.keys(this.users).map(id => {
+        let user = this.users[id]
+        user.id = id
+        return user
+      })
+    }
+  },
+  methods: {
+    remove: function (index) {
+      const userID = this.tableContent[index].id
+
+      return fetch(`${url}/users/${userID}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': client.getAuthorizationHeader() }
+      })
+        .then((res) => {
+          if (res.status !== 200) {
+            return res.json().then((body) => { console.error('failed to delete the user: ', body) })
+          }
+
+          this.$delete(this.users, userID)
+        })
+    }
   }
 }
 </script>

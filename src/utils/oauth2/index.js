@@ -7,7 +7,7 @@ const url = 'http://localhost:42000'
 const client = new Client({
   clientID: 'controle-panel',
   serverURL: url,
-  scopes: ['users', 'clients.read'],
+  scopes: ['users', 'clients'],
   response_type: 'token',
   debug: true
 })
